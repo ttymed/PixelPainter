@@ -1,52 +1,46 @@
+$(document).ready (function(){
+	function PixelPainter(width, height, size){
+		this.width= width;
+		this.height= height;
+		this.size= size;
 
-var context = document.getElementById('canvasInAPerfectWorld').getContext("2d");
+		this.render = function(where, what){
+			$(where).css("height", "50%").css("width", "50%").css("float", "left");
+			for(var i = 0; i < height;i++){
+				$(where).append("<tr id='" + what+"row"+i+"'>");
+				$("#"+what+"row"+i).css("border", "1px solid black");
 
-$('#canvas').mousedown(function(e){
-  var mouseX = e.pageX - this.offsetLeft;
-  var mouseY = e.pageY - this.offsetTop;
-        
-  paint = true;
-  addClick(e.pageX - this.offsetLeft, e.pageY - this.offsetTop);
-  redraw();
+				for(var k = 0; k < width; k++) {
+					$("#"+what+"row"+i).append("<td class='columns"+k+"'>");
+					$(".columns"+k).css("border", "1px solid black");
+					$(".columns"+k).css("width", size);
+					$(".columns"+k).css("height", size);
+				}
+			}
+				$("td").click(function(){
+					$(this).css("background-color", current_color);
+				});
+			
+		};
+		this.easel = function(ewhere, ewhat){
+			$(ewhere).css("height", "100px").css("width", "100px").css("float", "left");
+			for (var f = 0; f < 6; f++) {
+				$(ewhere).append("<tr id='"+ewhat+"erow"+f+"'>");
+				for(var h = 0; h < 5; h++){
+					var color_cell = $("<td id='" + "erow" + f + "ebox"+h+"' class='ecolumns"+h+"'>");
+					$("#"+ewhat+"erow"+h).append(color_cell);
+					$(".ecolumns"+h).css("border", "2px solid black");
+					$(".ecolumns"+h).css("width", "25px");
+					$(".ecolumns"+h).css("height", "25px");
+				color_cell.click(function(){
+					current_color = $(this).css("background-color");
+		});
+				}
+			}
+		};
+		
+	}
+	var pixelPainter = new PixelPainter(50, 50, 10);
+	pixelPainter.render("#container", "toolbar");
+	pixelPainter.easel("#easel", "easel");
 });
-
-$('#canvas').mousemove(function(e){
-    if(paint){
-    addClick(e.pageX - thix.offsetLeft, e. pageY - this.offsetTop, true);
-    redraw();
-}
-});
-$('canvas').mouseup(function(e){
-    paint = false;
-});
-
-$('canvas').mouseleave(function(e){
-    paint = false;
-});
-
-var clickX = new Array();
-var clickY = new Array();
-var clickDrag = new Array();
-var paint;
-
-function addClick(x, y, dragging)
-{
-    clickX.push(x);
-    clickY.push(y);
-    clickDrag.push(dragging);
-}
-function redraw() {
-    context.clearRect(0, 0, context.canvas.width, context.canvas.height);
-
-    context.strokeStyle = "#df4b26"
-    context.lineJoin = "round";
-    context.lineWidth = 5;
-
-    for(var i=0; i < clickX.length; i++) {
-        context.beginPath();
-        if(clickDrag[i] && i){
-            context.moveTo(clickX[i-1], clickY[i-1]);
-        }   else    {
-            context.moveTo(clickX[i]-1, clickY[i]);
-        }
-    }
