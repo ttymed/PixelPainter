@@ -20,6 +20,22 @@ $(document).ready (function(){
 				$("#container tr td").click(function(){
 					$(this).css("background-color", current_color);
 				});
+				var isMouseDown = false;
+
+				$("#container").mousedown(function() {
+				isMouseDown = true;
+				});
+				$("#container").mouseup(function() {
+						isMouseDown = false;
+					});
+
+				$('#container tr td').mouseenter(function() {
+					if(isMouseDown)
+					$(this).css("background-color",current_color);});
+
+				$('#container td').click(function() {
+					$(this).css("background-color", current_color);
+				});
 			
 		};
 		this.easel = function(ewhere, ewhat){
@@ -59,6 +75,8 @@ $(document).ready (function(){
 			reset_cell.click(function(){
 				$("#container tr .color_cell").css("background-color", "white").
 				css("border", "1px solid black");
+			
+ 
 			});
 		};
 	}
